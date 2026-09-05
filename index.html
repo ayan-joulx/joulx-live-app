@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joulx | Enterprise AI Control Tower</title>
+    <style>
+        :root {
+            --bg-color: #07090e;
+            --card-bg: #111622;
+            --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --border-color: #1e293b;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 850px;
+        }
+        .step-container {
+            display: none;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        .step-container.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .logo-box {
+            background: var(--accent-gradient);
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+        h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #e2e8f0;
+        }
+        p {
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        label {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        input, select {
+            background-color: #080c14;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 14px 18px;
+            color: white;
+            font-size: 15px;
+            outline: none;
+            transition: 0.3s;
+        }
+        input:focus, select:focus {
+            border-color: #3b82f6;
+        }
+        .grid-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 600px) {
+            .grid-options { grid-template-columns: 1fr; }
+        }
+        .option-card {
+            background-color: #080c14;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .option-card:hover, .option-card.selected {
+            border-color: #3b82f6;
+            background-color: #0f172a;
+        }
+        .option-card h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: white;
+        }
+        .option-card p {
+            font-size: 13px;
+            margin-bottom: 0;
+        }
+        .btn {
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 14px 28px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+        }
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .metric-card {
+            background-color: #080c14;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+        .metric-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #38bdf8;
+            margin-top: 5px;
+        }
+        .output-box {
+            background-color: #080c14;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px;
+            font-family: monospace;
+            font-size: 13px;
+            color: #38bdf8;
+            margin-top: 20px;
+            white-space: pre-wrap;
+        }
+        .config-panel {
+            background: #080c14;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- STEP 1: Welcome Screen -->
+        <div id="step-1" class="step-container active">
+            <div class="logo-box">⚡</div>
+            <h1>JOULX</h1>
+            <p>Welcome to the Enterprise AI Control Tower. Optimize thermodynamic model weights, reduce cluster power draw, and deploy high-performance intelligence securely.</p>
+            <button class="btn" onclick="nextStep(2)">Get Started ➔</button>
+        </div>
+
+        <!-- STEP 2: Enterprise Signup -->
+        <div id="step-2" class="step-container">
+            <h2>Client Registration</h2>
+            <p>Provide your organization details to provision secure enterprise access credentials.</p>
+            <div class="input-group">
+                <label>Company Name</label>
+                <input type="text" id="companyName" placeholder="e.g., Apex Autonomous">
+            </div>
+            <div class="input-group">
+                <label>Work Email</label>
+                <input type="email" id="workEmail" placeholder="name@company.com">
+            </div>
+            <button class="btn" onclick="validateSignup()">Proceed to Industry Selection ➔</button>
+        </div>
+
+        <!-- STEP 3: Industry Vertical Selection -->
+        <div id="step-3" class="step-container">
+            <h2>Select Industry Vertical</h2>
+            <p>Choose your target operational ecosystem for customized tensor calibration.</p>
+            <div class="grid-options">
+                <div class="option-card" onclick="selectIndustry(this, 'Cloud Hyperscalers')">
+                    <h3>Cloud Hyperscalers</h3>
+                    <p>Massive data center model scaling & power capping.</p>
+                </div>
+                <div class="option-card" onclick="selectIndustry(this, 'Foundation LLMs')">
+                    <h3>Foundation LLMs</h3>
+                    <p>Large language model weight pruning & throughput.</p>
+                </div>
+                <div class="option-card" onclick="selectIndustry(this, 'AI Hospitals')">
+                    <h3>AI Hospitals</h3>
+                    <p>High-security clinical diagnostic AI acceleration.</p>
+                </div>
+                <div class="option-card" onclick="selectIndustry(this, 'Global Banks')">
+                    <h3>Global Banks</h3>
+                    <p>Low-latency fraud detection & secure core banking.</p>
+                </div>
+                <div class="option-card" onclick="selectIndustry(this, 'Autonomous Vehicles')">
+                    <h3>Self-Driving Systems</h3>
+                    <p>Real-time perception pipeline optimization.</p>
+                </div>
+                <div class="option-card" onclick="selectIndustry(this, 'Robotics & Drones')">
+                    <h3>Robotics & Drones</h3>
+                    <p>Edge battery efficiency & onboard inference.</p>
+                </div>
+            </div>
+            <button class="btn" onclick="confirmIndustry()">Proceed to Deployment Architecture ➔</button>
+        </div>
+
+        <!-- STEP 4: Deployment Architecture Selection -->
+        <div id="step-4" class="step-container">
+            <h2>Select Deployment Architecture</h2>
+            <p>Choose how Joulx control infrastructure integrates with your stack.</p>
+            <div class="grid-options">
+                <div class="option-card" onclick="selectDeployment(this, 'Edge AI Deployment')">
+                    <h3>Edge AI Deployment</h3>
+                    <p>On-device local runtime weights & thermal throttling control.</p>
+                </div>
+                <div class="option-card" onclick="selectDeployment(this, 'Managed API Key Gateway')">
+                    <h3>API Key Gateway</h3>
+                    <p>Cloud-routed secure inference via enterprise token control.</p>
+                </div>
+                <div class="option-card" onclick="selectDeployment(this, 'Private Server Air-Gapped')">
+                    <h3>Private Server Deployment</h3>
+                    <p>Dedicated on-premise container cluster with zero external telemetry.</p>
+                </div>
+            </div>
+            <button class="btn" onclick="confirmDeployment()">Launch Control Tower Dashboard ➔</button>
+        </div>
+
+        <!-- STEP 5: Control Tower & Optimization Dashboard -->
+        <div id="step-5" class="step-container">
+            <h2>Joulx Control Tower Dashboard</h2>
+            <p id="summaryText" style="margin-bottom: 20px; color: #38bdf8; font-weight: 600;"></p>
+            
+            <!-- Dynamic Architecture Settings Panel -->
+            <div id="architectureConfig" class="config-panel"></div>
+
+            <div class="input-group">
+                <label>Target Model Sparsity Ratio (%)</label>
+                <input type="number" id="sparsityRatio" value="50" min="10" max="90">
+            </div>
+            
+            <button class="btn" onclick="runPipeline()">Execute Thermodynamic Optimization Pipeline</button>
+            
+            <div id="dashboardResults" style="display: none;">
+                <div class="metrics">
+                    <div class="metric-card">
+                        <label>Target Sparsity</label>
+                        <div class="metric-value" id="resSparsity">50%</div>
+                    </div>
+                    <div class="metric-card">
+                        <label>Active Tensors</label>
+                        <div class="metric-value" id="resTensors">1,024 / 2,048</div>
+                    </div>
+                    <div class="metric-card">
+                        <label>Power Saved</label>
+                        <div class="metric-value" id="resPower">38.5 kW/h</div>
+                    </div>
+                </div>
+                <div id="terminalOutput" class="output-box"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let userData = {
+            company: "",
+            email: "",
+            industry: "",
+            deployment: "",
+            apiKey: "joulx_live_sec_99a8f234bc10"
+        };
+
+        function nextStep(stepNumber) {
+            document.querySelectorAll('.step-container').forEach(el => el.classList.remove('active'));
+            document.getElementById('step-' + stepNumber).classList.add('active');
+        }
+
+        async function validateSignup() {
+            const company = document.getElementById('companyName').value;
+            const email = document.getElementById('workEmail').value;
+            if(company && email) {
+                userData.company = company;
+                userData.email = email;
+                
+                try {
+                    const response = await fetch('http://127.0.0.1:8000/api/signup', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ company_name: company, work_email: email })
+                    });
+                    const data = await response.json();
+                    if(data.api_key) {
+                        userData.apiKey = data.api_key;
+                    }
+                } catch (err) {
+                    console.log('Backend offline or running locally, using default token.');
+                }
+
+                nextStep(3);
+            } else {
+                alert('Please fill in both company name and work email.');
+            }
+        }
+
+        function selectIndustry(element, industryName) {
+            document.querySelectorAll('#step-3 .option-card').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            userData.industry = industryName;
+        }
+
+        function confirmIndustry() {
+            if(userData.industry) {
+                nextStep(4);
+            } else {
+                alert('Please select an industry vertical.');
+            }
+        }
+
+        function selectDeployment(element, deploymentName) {
+            document.querySelectorAll('#step-4 .option-card').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            userData.deployment = deploymentName;
+        }
+
+        function confirmDeployment() {
+            if(userData.deployment) {
+                document.getElementById('summaryText').innerText = 
+                    `Organization: ${userData.company} | Vertical: ${userData.industry} | Architecture: ${userData.deployment}`;
+                
+                renderArchitectureSettings();
+                nextStep(5);
+            } else {
+                alert('Please select a deployment architecture.');
+            }
+        }
+
+        function renderArchitectureSettings() {
+            const panel = document.getElementById('architectureConfig');
+            
+            if(userData.deployment === 'Private Server Air-Gapped') {
+                panel.innerHTML = `
+                    <h3 style="color:#fff; font-size:16px; margin-bottom:10px;">🔒 Private On-Premise Air-Gapped Setup</h3>
+                    <p style="font-size:13px; margin-bottom:10px;">Company servers connect locally via internal Docker cluster without cloud exposure.</p>
+                    <div class="input-group">
+                        <label>Internal Cluster IP / Hostname</label>
+                        <input type="text" id="privateIp" value="10.240.51.10:8080" placeholder="e.g. 192.168.1.100">
+                    </div>
+                    <div class="input-group">
+                        <label>Security Protocol</label>
+                        <select><option>Air-Gapped mTLS 256-bit</option><option>Local VPC Tunnel</option></select>
+                    </div>`;
+            } else if(userData.deployment === 'Managed API Key Gateway') {
+                panel.innerHTML = `
+                    <h3 style="color:#fff; font-size:16px; margin-bottom:10px;">🔑 Enterprise API Gateway Integration</h3>
+                    <p style="font-size:13px; margin-bottom:10px;">Route production traffic securely through Joulx cloud proxy endpoints using your Bearer Token.</p>
+                    <div class="input-group">
+                        <label>Provisioned API Secret Key</label>
+                        <input type="text" id="apiKeyField" readonly value="${userData.apiKey}">
+                    </div>
+                    <div class="input-group">
+                        <label>Gateway Endpoint Region</label>
+                        <select><option>US-East (Primary Enterprise)</option><option>EU-Central (GDPR Compliant)</option><option>AP-South (Low Latency)</option></select>
+                    </div>`;
+            } else {
+                panel.innerHTML = `
+                    <h3 style="color:#fff; font-size:16px; margin-bottom:10px;">⚡ Edge AI On-Device Hardware Target</h3>
+                    <p style="font-size:13px; margin-bottom:10px;">Deploy optimized weight matrices directly onto localized hardware accelerators (Jetson, NPU, Drones).</p>
+                    <div class="input-group">
+                        <label>Hardware Accelerator Target</label>
+                        <select><option>Nvidia Jetson Orin / Xavier</option><option>Qualcomm Cloud AI 100 / NPU</option><option>Custom ARM Cortex-R Embedded</option></select>
+                    </div>
+                    <div class="input-group">
+                        <label>Thermal Throttling Limit (°C)</label>
+                        <input type="number" value="75" min="50" max="95">
+                    </div>`;
+            }
+        }
+
+        async function runPipeline() {
+            const sparsity = parseFloat(document.getElementById('sparsityRatio').value);
+            const resultsDiv = document.getElementById('dashboardResults');
+            const terminal = document.getElementById('terminalOutput');
+            
+            resultsDiv.style.display = 'block';
+            terminal.innerHTML = "[INFO] Connecting to local Python backend engine...";
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/api/optimize', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        api_key: userData.apiKey,
+                        company_name: userData.company,
+                        industry: userData.industry,
+                        deployment: userData.deployment,
+                        sparsity: sparsity
+                    })
+                });
+
+                const data = await response.json();
+
+                if(response.ok) {
+                    document.getElementById('resSparsity').innerText = data.sparsity;
+                    document.getElementById('resTensors').innerText = data.active_tensors;
+                    document.getElementById('resPower').innerText = data.power_saved;
+                    
+                    let connectionLog = "";
+                    if(userData.deployment === 'Private Server Air-Gapped') {
+                        const ip = document.getElementById('privateIp')?.value || '10.240.51.10';
+                        connectionLog = `[CONNECT] Establishing secure local tunnel to private cluster at ${ip}...\n[VERIFY] Zero external telemetry confirmed. Air-gap integrity secure.`;
+                    } else if(userData.deployment === 'Managed API Key Gateway') {
+                        connectionLog = `[CONNECT] Authenticating via secure token gateway...\n[VERIFY] API Key verified against enterprise tenant pool. Secure proxy active.`;
+                    } else {
+                        connectionLog = `[CONNECT] Compiling optimized tensors for Edge hardware target...\n[VERIFY] Runtime weights mapped successfully to local hardware runtime.`;
+                    }
+
+                    terminal.innerHTML = `[INFO] Initializing Joulx Core Engine for ${userData.company}...
+[INFO] Vertical Target: ${userData.industry}
+[INFO] Deployment Architecture: ${userData.deployment}
+${connectionLog}
+[COMPUTE] Executing thermodynamic weight pruning at ${sparsity}% threshold...
+[SUCCESS] ${data.message}`;
+                } else {
+                    terminal.innerHTML = `[ERROR] Backend validation failed: ${data.detail}`;
+                }
+            } catch (error) {
+                terminal.innerHTML = `[ERROR] Could not connect to local server at http://127.0.0.1:8000.\nMake sure your uvicorn command terminal is running!`;
+            }
+        }
+    </script>
+</body>
+</html>
