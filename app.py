@@ -1,7 +1,8 @@
+import os
+import random
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import random
 
 app = FastAPI(title="Joulx Enterprise Control Tower")
 
@@ -45,3 +46,8 @@ def optimize_model(data: OptimizationRequest):
         "power_saved": f"{saved_power} kW/h",
         "message": f"Successfully calibrated weights for {data.architecture} architecture."
     }
+
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("app:app", host="0.0.0.0", port=port)
