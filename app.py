@@ -7,4 +7,6 @@ app = FastAPI(
 
 @app.get("/")
 def read_root():
-    return {"status": "online", "message": "Joulx Enterprise Control Tower is running successfully!"}
+    return {"status": "online", "message": "Joulx Enterprise Control Tower is running smoothly on Vercel!"}
+
+# Agar tumhare aur bhi routes (endpoints) hain, woh sab yahan niche aa jayenge:
