@@ -1,14 +1,15 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 import random
+import os
 
 app = FastAPI(
     title="Joulx Enterprise Control Tower",
     version="1.0.0"
 )
 
-# CORS setup taake frontend request block na ho
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -28,13 +29,16 @@ class OptimizeRequest(BaseModel):
     deployment: str
     sparsity: float
 
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 def read_root():
-    return {"status": "online", "message": "Joulx Enterprise Control Tower is running successfully!"}
+    # Yeh code root URL par seedha hamara index.html dashboard dikhayega
+    if os.path.exists("index.html"):
+        with open("index.html", "r", encoding="utf-8") as f:
+            return f.read()
+    return {"status": "online", "message": "Joulx Enterprise Control Tower API is running!"}
 
 @app.post("/api/signup")
 def handle_signup(data: SignupRequest):
-    # Generate a dummy secure API key for the enterprise tenant
     generated_key = f"joulx_live_sec_{random.randint(100000, 999999)}bc10"
     return {
         "status": "success",
@@ -44,7 +48,6 @@ def handle_signup(data: SignupRequest):
 
 @app.post("/api/optimize")
 def handle_optimize(data: OptimizeRequest):
-    # Calculate simulated metrics based on sparsity ratio
     active_tensors_count = int(2048 * (1 - (data.sparsity / 100)))
     power_saved_val = round(data.sparsity * 0.77, 2)
     
